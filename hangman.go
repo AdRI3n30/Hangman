@@ -10,17 +10,18 @@ import (
 )
 
 func main() {
-	reader := bufio.NewReader(os.Stdin)
 	mot := MotRandom()
 	lettreEntrer := ""
 	lettresDevinees := make([]bool, len(mot))
 	tentatives := 10
 	for tentatives > 0 {
+		fmt.Println(mot)
 		fmt.Println(motMasque(mot, lettresDevinees))
 		fmt.Printf("Tentatives restantes : %d\n", tentatives)
 		fmt.Println("Lettres déja utilisées : " + lettreEntrer)
 		fmt.Print("Entrer une lettre: ")
-		lettre, _ := reader.ReadString('\n')
+		var lettre string
+		fmt.Scanln(&lettre)
 
 		if strings.Contains(lettreEntrer, lettre) {
 			fmt.Printf("\x1bc")
@@ -44,7 +45,7 @@ func main() {
 		if motMasque(mot, lettresDevinees) == mot {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
-			fmt.Printf("Bien joué vous avez trouvé le mot" + mot)
+			fmt.Printf("Bien joué vous avez trouvé le mot " + mot)
 			break
 		}
 		fmt.Printf("\x1bc")
