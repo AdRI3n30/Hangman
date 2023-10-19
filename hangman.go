@@ -34,7 +34,7 @@ func main() {
 		}
 		//Cette condition permet de vérifier  si le joueur entre bien une lettre déjà pas utiliser
 		if strings.Contains(lettreEntrer, lettre) {
-			fmt.Printf("\x1bc")
+			fmt.Printf("\x1bc") //Ces deux lignes servent à clear le terminal et donc revenir à l'affiche seulement
 			fmt.Printf("\x1b[2J")
 			fmt.Print("Veuillez entrer une lettre non utilisée.")
 		}
