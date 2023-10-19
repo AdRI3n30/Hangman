@@ -10,11 +10,13 @@ import (
 )
 
 func main() {
+	/**On va d'abord crée une fonction Main pour réunir les autres fonctions qu'on va crée en dessous pour réaliser le jeu du pendu **/
 	mot := MotRandom()
 	lettreEntrer := ""
 	lettresDevinees := make([]bool, len(mot))
 	tentatives := 10
 	erreur := 0
+	//Cette boucle permet de continuer le jeu tant qu'il lui reste des tentatives
 	for tentatives > 0 {
 		fmt.Println(mot)
 		dessin(erreur)
@@ -25,10 +27,12 @@ func main() {
 		var lettre string
 		fmt.Scanln(&lettre)
 
+		//Cette condition permet de vérifier si le joueur entre bien une lettre en miniscule et non un chiffre
 		if lettre == "" || len(lettre) != 1 || !IsAlpha(lettre) {
 			fmt.Println("\nVeuillez entrer une seule lettre valide.")
 			continue
 		}
+		//Cette condition permet de vérifier  si le joueur entre bien une lettre déjà pas utiliser
 		if strings.Contains(lettreEntrer, lettre) {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
@@ -39,17 +43,20 @@ func main() {
 
 		lettre_fausse := true
 
+		//Boucle permettant de changer les valeurs dans le slice lettreDeveinees
 		for i, c := range mot {
 			if lettre[0] == byte(c) {
 				lettresDevinees[i] = true
 				lettre_fausse = false
 			}
 		}
+		//Teste si lettre_fausse == True et donc diminue de 1 les tentatives et augmente de 1 les erreurs
 		if lettre_fausse {
 			tentatives--
 			erreur++
 		}
 
+		//Cette condition permet de vérifier si le mot à été trouver et si c'est le cas arréte le jeu
 		if motMasque(mot, lettresDevinees) == mot {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
@@ -60,11 +67,14 @@ func main() {
 		fmt.Printf("\x1b[2J")
 
 	}
+	//Condition permettant l'arrét de jeu si le joueur n'a plus de tentative
 	if tentatives == 0 {
 		fmt.Printf("Vous avez perdu -_-")
 	}
 
 }
+
+// Fonction qui va prendre un mot random du Fichier "words.txt" et le return
 func MotRandom() string {
 	file, err := os.Open("words.txt")
 	var words []string
@@ -83,6 +93,7 @@ func MotRandom() string {
 	return mot_rand
 }
 
+// Fonction qui créée l'interface du mot qui est masqué
 func motMasque(mot string, lettresDevinees []bool) string {
 	motMasque := ""
 	for i, c := range mot {
@@ -95,6 +106,7 @@ func motMasque(mot string, lettresDevinees []bool) string {
 	return motMasque
 }
 
+// Fonction permettant l'affichage du pendu
 func dessin(erreur int) {
 	f, err := os.Open("hangman.txt")
 	if err != nil {
@@ -151,6 +163,7 @@ func dessin(erreur int) {
 	}
 }
 
+// Fonction qui teste si le string passé en paramètre est bien une lettre et nonautre chose
 func IsAlpha(s string) bool {
 	length := len(s)
 	compt := 0
