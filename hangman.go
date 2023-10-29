@@ -1,12 +1,13 @@
 package main
 
+//Importation de modules permettant les affichages / les fonctionnalités de random
 import (
-	"bufio"
-	"fmt"
-	"log"
-	"math/rand"
-	"os"
-	"strings"
+	"bufio"     //Importation de module permettant l'utilisation de mémoire tampon
+	"fmt"       //Importation de module permettant les affichages
+	"log"       //Importation de module permettant l'utilisation de méthode de formatage
+	"math/rand" //Importation de module permettant les fonctionnalités de random
+	"os"        //Importation de module permettant la manipulation d'une interface indépendante
+	"strings"   //Importation de module permettant la manipulation des strings codées en UTF-8
 )
 
 func main() {
@@ -18,7 +19,7 @@ func main() {
 	erreur := 0
 	//Cette boucle permet de continuer le jeu tant qu'il lui reste des tentatives
 	for tentatives > 0 {
-		fmt.Println(mot)
+		fmt.Println(mot) //Tout les fmt.Print() sont là pour l'affichage du jeu
 		dessin(erreur)
 		fmt.Println(motMasque(mot, lettresDevinees))
 		fmt.Printf("Tentatives restantes : %d\n", tentatives)
@@ -60,8 +61,8 @@ func main() {
 		if motMasque(mot, lettresDevinees) == mot {
 			fmt.Printf("\x1bc")
 			fmt.Printf("\x1b[2J")
-			fmt.Printf("Bien joué vous avez trouvé le mot " + mot)
-			break
+			fmt.Printf("Bien joué vous avez trouvé le mot " + mot) //Fin du Jeu
+			break                                                  //Arrêt du programme
 		}
 		fmt.Printf("\x1bc")
 		fmt.Printf("\x1b[2J")
@@ -76,9 +77,9 @@ func main() {
 
 // Fonction qui va prendre un mot random du Fichier "words.txt" et le return
 func MotRandom() string {
-	file, err := os.Open("words.txt")
+	file, err := os.Open("words.txt") //Cela va ouvrir le fichier words.txt
 	var words []string
-	if err != nil {
+	if err != nil { //Verifie qu'il n'y a pas d'erreur
 		log.Fatal(err)
 	}
 	Scanner := bufio.NewScanner(file)
@@ -86,10 +87,10 @@ func MotRandom() string {
 	for Scanner.Scan() {
 		words = append(words, Scanner.Text())
 	}
-	if err := Scanner.Err(); err != nil {
+	if err := Scanner.Err(); err != nil { //Verifie qu'il n'y a pas d'erreur
 		log.Fatal(err)
 	}
-	mot_rand := words[rand.Intn(len(words))]
+	mot_rand := words[rand.Intn(len(words))] //Crée une variable qui aura un mot aléatoire du slice words
 	return mot_rand
 }
 
@@ -97,10 +98,10 @@ func MotRandom() string {
 func motMasque(mot string, lettresDevinees []bool) string {
 	motMasque := ""
 	for i, c := range mot {
-		if lettresDevinees[i] {
-			motMasque += string(c)
+		if lettresDevinees[i] { //Condition qui regarde si dans lettresDevinees à l'indice "i", si c'est true(le joueur à trouvé une bonne lettre ) alors
+			motMasque += string(c) //si c'est true(le joueur à trouvé une bonne lettre ) alors le mot masquée va afficher la lettre
 		} else {
-			motMasque += "_"
+			motMasque += "_" //Sinon le mot reste masquée
 		}
 	}
 	return motMasque
@@ -116,8 +117,8 @@ func dessin(erreur int) {
 	scanner := bufio.NewScanner(f)
 	cpt := 0
 	cptEnd := 0
-	switch erreur {
-	case 0:
+	switch erreur { //Prend en paramètre la variable erreur et l'évalue pour savoir qu'elle case il va prendre
+	case 0: //Chaque case comporte des paramètres qui correspondes à un dessin du dossier hangman.txt
 		cpt = 0
 		cptEnd = 0
 	case 1:
@@ -152,13 +153,13 @@ func dessin(erreur int) {
 		cptEnd = 80
 	}
 	i := 0
-	for scanner.Scan() {
+	for scanner.Scan() { //Après avoir choisi la case, on va l'analyser
 		if i >= cpt && i < cptEnd {
-			fmt.Println(scanner.Text())
+			fmt.Println(scanner.Text()) //Puis on affiche se que comporte la case(ici une étape du dessin)
 		}
 		i++
 	}
-	if err := scanner.Err(); err != nil {
+	if err := scanner.Err(); err != nil { //Verifie qu'il n'y a pas d'erreur
 		log.Fatal(err)
 	}
 }
@@ -168,12 +169,12 @@ func IsAlpha(s string) bool {
 	length := len(s)
 	compt := 0
 	for index, i := range s {
-		if i >= rune(65) && i < rune(91) || i >= rune(97) && i <= rune(122) {
-			compt++
+		if i >= rune(65) && i < rune(91) || i >= rune(97) && i <= rune(122) { //Condition qui regarde si est une lettre miniscule ou majuscule grâce à la table ASCII
+			compt++ //Ajoute +1 au compteur quand "i" est une lettre
 			index++
 		}
 	}
-	if compt == length {
+	if compt == length { //Vérifie si le compteur est égale à la longueur du mot passé en paramètre
 		return true
 	} else {
 		return false
